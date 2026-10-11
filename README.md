@@ -15,3 +15,28 @@ pip install -r requirements.txt
 ```bash
 python check_env.py
 ```
+
+## Форматирование и проверка стиля (PEP 8)
+
+```bash
+pip install black flake8
+black calculator.py test_calculator.py check_env.py
+flake8 calculator.py test_calculator.py check_env.py
+```
+
+## Тесты
+
+```bash
+python -m unittest -v test_calculator
+python -m doctest -v calculator.py
+```
+
+## Отладка
+
+Ошибка деления на ноль найдена с помощью отладчика pdb:
+
+```bash
+python -m pdb -c continue calculator.py
+```
+
+Полезные команды pdb: `n` (следующая строка), `s` (войти в функцию), `p a, b` (вывести значения переменных), `c` (продолжить), `q` (выйти).

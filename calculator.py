@@ -62,8 +62,13 @@ def divide(a: float, b: float) -> float:
     Returns:
         float: Частное a / b.
 
+    Raises:
+        ValueError: Если делитель равен нулю.
+
     Example:
         >>> divide(10, 4)
         2.5
     """
-    return a / b  # Ошибка при b=0
+    if b == 0:
+        raise ValueError("Деление на ноль невозможно")
+    return a / b

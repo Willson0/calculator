@@ -2,7 +2,7 @@
 
 import unittest
 
-from calculator import add_numbers
+from calculator import add_numbers, divide
 
 
 class TestAddNumbers(unittest.TestCase):
@@ -19,6 +19,19 @@ class TestAddNumbers(unittest.TestCase):
     def test_add_float_numbers(self):
         """Сложение дробных чисел."""
         self.assertAlmostEqual(add_numbers(0.1, 0.2), 0.3)
+
+
+class TestDivide(unittest.TestCase):
+    """Тесты функции divide."""
+
+    def test_divide_numbers(self):
+        """Деление двух чисел."""
+        self.assertEqual(divide(10, 4), 2.5)
+
+    def test_divide_by_zero_raises_value_error(self):
+        """Деление на ноль должно вызывать понятную ошибку."""
+        with self.assertRaises(ValueError):
+            divide(1, 0)
 
 
 if __name__ == "__main__":
