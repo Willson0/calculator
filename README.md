@@ -40,3 +40,22 @@ python -m pdb -c continue calculator.py
 ```
 
 Полезные команды pdb: `n` (следующая строка), `s` (войти в функцию), `p a, b` (вывести значения переменных), `c` (продолжить), `q` (выйти).
+
+## Задачи из лекции
+
+Каждая задача лежит в своей папке и запускается отдельно. Тесты — стандартным `unittest`.
+
+| Папка | Задача | Запуск |
+|---|---|---|
+| [Task1_Caesar_Cipher](Task1_Caesar_Cipher) | Шифр Цезаря (русский и английский, автоопределение языка) | `python caesar_cipher.py` |
+| [Task2_Olympiad_Winners](Task2_Olympiad_Winners) | Тройка победителей олимпиады (`check_winners`) | `python olympiad_winners.py` |
+| [Task3_Pastry_Boxes](Task3_Pastry_Boxes) | Расфасовка пирожных по коробкам на 3 и 5 | `python pastry_boxes.py` |
+| [Task4_Password_Generator](Task4_Password_Generator) | Генератор паролей с настройками и меню | `python password_generator.py` |
+| [Task5_Roman_Numerals](Task5_Roman_Numerals) | Конвертер римских и обычных цифр | `python roman_numerals.py` |
+| [Task6_Hangman](Task6_Hangman) | Игра «Виселица» | `python hangman.py` |
+
+Запуск тестов в папке задачи:
+
+```bash
+python -m unittest -v
+```
