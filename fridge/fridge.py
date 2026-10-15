@@ -5,7 +5,7 @@ DATE_FORMAT = '%Y-%m-%d'
 
 
 def add(items, title, amount, expiration_date=None):
-    """Добавляет партию продукта `title` в словарь `items`."""
+    """добавляем продукт в холодильник"""
     if title not in items:
         items[title] = []
     if expiration_date is not None:
@@ -29,7 +29,7 @@ def _parse_amount(text):
 
 
 def add_by_note(items, note):
-    """Разбирает строки вида «название количество [год-месяц-день]» и добавляет их в `items`."""
+    """берём строку, разбиваем по пробелам и отдаём в add"""
     for line in note.splitlines():
         parts = line.split()
         if not parts:
@@ -45,13 +45,13 @@ def add_by_note(items, note):
 
 
 def find(items, needle):
-    """Возвращает названия продуктов, в которых есть подстрока `needle` (без учёта регистра)."""
+    """ищем продукты, где в названии есть нужное слово (регистр не важен)"""
     needle = needle.lower()
     return [title for title in items if needle in title.lower()]
 
 
 def get_amount(items, needle):
-    """Возвращает суммарное количество продуктов, в названии которых есть `needle`."""
+    """считаем, сколько всего продуктов с этим словом в названии"""
     product_amount = Decimal('0')
     for title in find(items, needle):
         for part in items[title]:
@@ -60,7 +60,7 @@ def get_amount(items, needle):
 
 
 def get_expired(items, in_advance_days=0):
-    """Возвращает список (название, количество) для партий с истекающим сроком годности."""
+    """смотрим, что уже испортилось (или испортится через N дней) и возвращаем список"""
     result = []
     today = dt.date.today()
     border = today + dt.timedelta(days=in_advance_days)
