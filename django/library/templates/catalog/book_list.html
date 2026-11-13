@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}Список книг{% endblock %}
+
+{% block content %}
+  <h1>Список книг</h1>
+  <ul>
+    {% for item in books %}
+      <li>
+        {{ item.title }} — {{ item.author }},
+        <span class="price">{{ item.price|format_currency }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>{{ book.title }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load custom_filters %}
 
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
   <h1>{{ book.title }}</h1>
   <p>Автор: {{ book.author }}</p>
   <p>Год: {{ book.year }}</p>
@@ -13,6 +11,7 @@
   <p>Страниц с запасом: {{ book.pages }}</p>
   <p>Рейтинг: {{ book.rating }}</p>
   <p>Комментарии: {{ comments_count }}</p>
+  <p>Цена: <span class="price">{{ book.price|format_currency }}</span></p>
 
   <p>Жанры: {{ book.genres }}</p>
 
@@ -25,9 +24,6 @@
   <ul>
     {% for genre in book.genres %}
       <li>{{ genre }}</li>
-      <li>Жанров нет</li>
     {% endfor %}
   </ul>
-
-</body>
-</html>
+{% endblock %}
