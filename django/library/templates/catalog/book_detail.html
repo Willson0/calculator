@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ book.title }}</title>
+</head>
+<body>
+
+  <h1>{{ book.title }}</h1>
+  <p>Автор: {{ book.author }}</p>
+  <p>Год: {{ book.year }}</p>
+
+  <p>Страниц с запасом: {{ book.pages }}</p>
+  <p>Рейтинг: {{ book.rating }}</p>
+  <p>Комментарии: {{ comments_count }}</p>
+
+  <p>Жанры: {{ book.genres }}</p>
+
+  {% if book.available %}
+    <p>В наличии</p>
+  {% else %}
+    <p>Нет в наличии</p>
+  {% endif %}
+
+  <ul>
+    {% for genre in book.genres %}
+      <li>{{ genre }}</li>
+      <li>Жанров нет</li>
+    {% endfor %}
+  </ul>
+
+</body>
+</html>
