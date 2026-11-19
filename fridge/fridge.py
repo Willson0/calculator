@@ -1,3 +1,5 @@
+"""Учёт продуктов в холодильнике: добавление, поиск и проверка сроков годности."""
+
 import datetime as dt
 from decimal import Decimal
 
@@ -5,7 +7,18 @@ DATE_FORMAT = '%Y-%m-%d'
 
 
 def add(items, title, amount, expiration_date=None):
-    """добавляем продукт в холодильник"""
+    """Добавляет партию продукта в холодильник.
+
+    Args:
+        items (dict): Словарь вида {название: [партии]}, который изменяется на месте.
+        title (str): Название продукта.
+        amount (int | Decimal): Количество продукта в этой партии.
+        expiration_date (str | None): Срок годности в формате 'ГГГГ-ММ-ДД'
+            или None, если срок не указан.
+
+    Raises:
+        ValueError: Если expiration_date передан, но не соответствует формату 'ГГГГ-ММ-ДД'.
+    """
     if title not in items:
         items[title] = []
     if expiration_date is not None:
@@ -14,6 +27,14 @@ def add(items, title, amount, expiration_date=None):
 
 
 def _is_date(text):
+    """Проверяет, является ли строка датой в формате 'ГГГГ-ММ-ДД'.
+
+    Args:
+        text (str): Строка для проверки.
+
+    Returns:
+        bool: True, если строка корректно разбирается как дата, иначе False.
+    """
     try:
         dt.datetime.strptime(text, DATE_FORMAT)
     except ValueError:
@@ -22,6 +43,19 @@ def _is_date(text):
 
 
 def _parse_amount(text):
+    """Преобразует строку с количеством в число.
+
+    Целые числа возвращаются как int, остальные (например, '0.5') как Decimal.
+
+    Args:
+        text (str): Строка с количеством.
+
+    Returns:
+        int | Decimal: Распознанное количество.
+
+    Raises:
+        decimal.InvalidOperation: Если строка не является ни целым, ни десятичным числом.
+    """
     try:
         return int(text)
     except ValueError:
@@ -29,7 +63,19 @@ def _parse_amount(text):
 
 
 def add_by_note(items, note):
-    """берём строку, разбиваем по пробелам и отдаём в add"""
+    """Добавляет продукты из текстовой заметки, где каждая строка описывает одну партию.
+
+    Формат строки: '<название> <количество> [<срок годности>]', где название может
+    содержать пробелы, а срок годности указывается в формате 'ГГГГ-ММ-ДД'.
+    Пустые строки пропускаются.
+
+    Args:
+        items (dict): Словарь продуктов, который изменяется на месте.
+        note (str): Многострочный текст с описанием продуктов.
+
+    Raises:
+        ValueError: Если в строке нет названия или количества.
+    """
     for line in note.splitlines():
         parts = line.split()
         if not parts:
@@ -45,13 +91,29 @@ def add_by_note(items, note):
 
 
 def find(items, needle):
-    """ищем продукты, где в названии есть нужное слово (регистр не важен)"""
+    """Ищет продукты, в названии которых есть заданное слово.
+
+    Args:
+        items (dict): Словарь продуктов.
+        needle (str): Искомая подстрока. Регистр не учитывается.
+
+    Returns:
+        list[str]: Названия продуктов, подходящих под запрос, в порядке хранения в словаре.
+    """
     needle = needle.lower()
     return [title for title in items if needle in title.lower()]
 
 
 def get_amount(items, needle):
-    """считаем, сколько всего продуктов с этим словом в названии"""
+    """Считает суммарное количество всех продуктов, в названии которых есть заданное слово.
+
+    Args:
+        items (dict): Словарь продуктов.
+        needle (str): Искомая подстрока. Регистр не учитывается.
+
+    Returns:
+        Decimal: Общее количество по всем найденным партиям (0, если ничего не найдено).
+    """
     product_amount = Decimal('0')
     for title in find(items, needle):
         for part in items[title]:
@@ -60,7 +122,20 @@ def get_amount(items, needle):
 
 
 def get_expired(items, in_advance_days=0):
-    """смотрим, что уже испортилось (или испортится через N дней) и возвращаем список"""
+    """Находит продукты, срок годности которых уже истёк или истекает в ближайшие дни.
+
+    Партии без срока годности (None) не учитываются.
+
+    Args:
+        items (dict): Словарь продуктов.
+        in_advance_days (int): На сколько дней вперёд смотреть. По умолчанию 0,
+            то есть проверяются только уже испорченные продукты.
+
+    Returns:
+        list[tuple[str, Decimal]]: Пары (название продукта, суммарное количество
+            просроченных или скоро просроченных партий). Продукты с нулевым
+            количеством не включаются.
+    """
     result = []
     today = dt.date.today()
     border = today + dt.timedelta(days=in_advance_days)

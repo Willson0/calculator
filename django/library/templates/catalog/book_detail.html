@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+  <h1>{{ book.title }}</h1>
+  <p>Автор: {{ book.author }}</p>
+  <p>Год: {{ book.year }}</p>
+
+  <p>Страниц с запасом: {{ book.pages }}</p>
+  <p>Рейтинг: {{ book.rating }}</p>
+  <p>Комментарии: {{ comments_count }}</p>
+  <p>Цена: <span class="price">{{ book.price|format_currency }}</span></p>
+
+  <p>Жанры: {{ book.genres }}</p>
+
+  {% if book.available %}
+    <p>В наличии</p>
+  {% else %}
+    <p>Нет в наличии</p>
+  {% endif %}
+
+  <ul>
+    {% for genre in book.genres %}
+      <li>{{ genre }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
